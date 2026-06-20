@@ -1,0 +1,35 @@
+\begin{figure}[ht!]
+    \centering
+    \Caption{\label{fig:jenkins-kubernetes}Arquitetura de agentes dinâmicos do Jenkins no Kubernetes}
+    \UECEfig{}{
+    \resizebox{0.95\textwidth}{!}{%
+    \begin{tikzpicture}[
+        node distance=1.2cm,
+        font=\small,
+        bloco/.style={rectangle, rounded corners, draw, align=center, minimum width=3.0cm, minimum height=0.9cm},
+        grupo/.style={rectangle, rounded corners, draw, dashed, inner sep=0.25cm},
+        seta/.style={-{Latex[length=2.4mm]}, thick}
+    ]
+    \node[bloco] (controller) {Jenkins\\Controller};
+    \node[bloco, right=of controller] (api) {API do\\Kubernetes};
+    \node[bloco, below=of api] (scheduler) {Scheduler\\Kubernetes};
+    \node[bloco, below left=of scheduler] (pod1) {Pod Agent 1\\JNLP + Docker};
+    \node[bloco, below=of scheduler] (pod2) {Pod Agent 2\\Maven + Trivy};
+    \node[bloco, below right=of scheduler] (pod3) {Pod Agent N\\Build Efêmero};
+    \node[bloco, right=1.6cm of scheduler] (spot) {Node Group\\Spot};
+    \node[bloco, left=1.6cm of controller] (ondemand) {Node Group\\On-Demand};
+    \draw[seta] (controller) -- (api);
+    \draw[seta] (api) -- (scheduler);
+    \draw[seta] (scheduler) -- (pod1);
+    \draw[seta] (scheduler) -- (pod2);
+    \draw[seta] (scheduler) -- (pod3);
+    \draw[seta] (scheduler) -- (spot);
+    \draw[seta] (ondemand) -- (controller);
+    \begin{scope}[on background layer]
+        \node[grupo, fit=(pod1)(pod2)(pod3)(spot), label={[font=\small]below:Capacidade elástica de execução}] {};
+    \end{scope}
+    \end{tikzpicture}%
+    }}{
+        \Fonte{Elaborado pelo autor}
+    }
+\end{figure}

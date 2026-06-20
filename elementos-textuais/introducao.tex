@@ -1,0 +1,62 @@
+\chapter{Introdução}
+\label{cap:introducao}
+
+A crescente transformação digital observada nas últimas décadas tem impulsionado organizações de diversos setores a buscarem processos cada vez mais eficientes para desenvolvimento, entrega e manutenção de software. Nesse contexto, a adoção de práticas DevOps tornou-se um fator estratégico para reduzir o tempo entre a concepção de uma funcionalidade e sua disponibilização ao usuário final, promovendo maior integração entre equipes de desenvolvimento e operações \cite{dora2024,gitlab2024}.
+
+A evolução das tecnologias de conteinerização, impulsionada por plataformas como Docker e Kubernetes, permitiu que organizações migrassem de modelos baseados em servidores estáticos para arquiteturas altamente escaláveis e distribuídas. O Kubernetes consolidou-se como padrão de mercado para orquestração de contêineres, oferecendo mecanismos de escalabilidade automática, balanceamento de carga, recuperação automática de falhas e abstração da infraestrutura subjacente \cite{jenkinskubernetes,spacelift2024}.
+
+Paralelamente, o crescimento da dependência de bibliotecas de terceiros, componentes de código aberto e serviços externos ampliou significativamente a superfície de ataque das aplicações modernas. Ataques direcionados à cadeia de suprimentos de software (\textit{Software Supply Chain}) tornaram-se mais frequentes e sofisticados, demonstrando que mecanismos tradicionais de segurança baseados exclusivamente em perímetros de rede já não são suficientes para proteger ambientes distribuídos e altamente dinâmicos \cite{gama2024}.
+
+Diante desse cenário, abordagens fundamentadas em \textit{Zero Trust Architecture} (ZTA) têm recebido crescente atenção da comunidade acadêmica e da indústria. O modelo Zero Trust parte do princípio de que nenhum componente deve ser considerado confiável por padrão, exigindo verificação contínua de identidade, contexto e conformidade antes da concessão de qualquer privilégio. Complementarmente, tecnologias como SPIFFE e SPIRE possibilitam a emissão e gerenciamento de identidades criptográficas para \textit{workloads} executados em ambientes distribuídos, fortalecendo mecanismos de autenticação e autorização entre serviços \cite{gama2024}.
+
+Além dos desafios relacionados à segurança, organizações enfrentam a necessidade de mensurar objetivamente a eficiência de seus processos de entrega de software. Nesse contexto, as métricas propostas pelo grupo \textit{DevOps Research and Assessment} (DORA) tornaram-se referência mundial para avaliação de desempenho operacional. Métricas como \textit{Deployment Frequency}, \textit{Lead Time for Changes}, \textit{Change Failure Rate} e \textit{Mean Time to Recovery} permitem avaliar simultaneamente velocidade de entrega e estabilidade operacional \cite{dora2024,dx2024}.
+
+A integração entre práticas DevOps, arquiteturas Kubernetes, métricas DORA e princípios de Zero Trust representa uma oportunidade para construção de ambientes de desenvolvimento mais seguros, resilientes e eficientes. Entretanto, ainda existem desafios relacionados à implementação dessas tecnologias de forma integrada, especialmente quando considerados aspectos de escalabilidade, custos operacionais, governança de segurança e observabilidade.
+
+\section{Problema de Pesquisa}
+\label{sec:problema-pesquisa}
+
+Apesar da ampla adoção de pipelines CI/CD e plataformas Kubernetes por organizações modernas, muitas implementações ainda apresentam limitações relacionadas ao uso ineficiente de recursos computacionais, à ausência de mecanismos avançados de validação contínua de segurança e à dificuldade de mensuração objetiva do desempenho operacional.
+
+Adicionalmente, a utilização de agentes estáticos de compilação, processos manuais de validação e modelos de segurança baseados exclusivamente em perímetro contribuem para o aumento de custos operacionais, ampliação da superfície de ataque e redução da capacidade de resposta diante de incidentes de segurança.
+
+Diante desse contexto, surge a seguinte questão de pesquisa:
+
+\begin{citacao}
+Como projetar uma arquitetura de CI/CD baseada em Kubernetes capaz de combinar eficiência operacional, redução de custos computacionais, monitoramento por métricas DORA e mecanismos de segurança fundamentados nos princípios de Zero Trust?
+\end{citacao}
+
+\section{Justificativa}
+\label{sec:justificativa}
+
+A relevância deste trabalho está associada ao crescimento contínuo da adoção de ambientes \textit{Cloud Native} e à necessidade de construção de pipelines cada vez mais seguras e automatizadas. Organizações modernas dependem da capacidade de entregar software rapidamente sem comprometer requisitos de qualidade, disponibilidade e segurança.
+
+Sob a perspectiva acadêmica, a pesquisa contribui para a consolidação do conhecimento relacionado à integração entre DevOps, Kubernetes, métricas DORA e arquiteturas Zero Trust, reunindo conceitos frequentemente estudados de forma isolada. Sob a perspectiva prática, os resultados obtidos podem servir como referência para equipes responsáveis pela modernização de pipelines de desenvolvimento em ambientes corporativos.
+
+Além disso, a análise comparativa entre plataformas gerenciadas de Kubernetes, associada à avaliação de estratégias de escalabilidade baseadas em agentes efêmeros e instâncias Spot, fornece subsídios relevantes para decisões arquiteturais envolvendo desempenho, disponibilidade e otimização de custos.
+
+\section{Objetivos}
+\label{sec:objetivos}
+
+\subsection{Objetivo Geral}
+\label{sec:objetivo-geral}
+
+Propor e analisar uma arquitetura de referência para automação de pipelines CI/CD em ambientes de nuvem utilizando Jenkins e Kubernetes, incorporando métricas DORA para monitoramento de desempenho e mecanismos de segurança baseados nos princípios de Zero Trust.
+
+\subsection{Objetivos Específicos}
+\label{sec:objetivos-especificos}
+
+\begin{alineas}
+    \item Investigar os conceitos fundamentais de DevOps, CI/CD, Kubernetes, DevSecOps e Zero Trust Architecture;
+    \item Comparar características técnicas, operacionais e financeiras das plataformas Amazon EKS, Azure AKS e Google GKE;
+    \item Projetar uma arquitetura baseada em Jenkins executando sobre Kubernetes com provisionamento dinâmico de agentes de compilação;
+    \item Implementar uma pipeline DevSecOps contendo mecanismos automatizados de análise estática, varredura de vulnerabilidades e implantação contínua;
+    \item Avaliar estratégias de redução de custos utilizando segregação de workloads entre instâncias On-Demand e Spot;
+    \item Aplicar métricas DORA para mensuração da eficiência operacional da arquitetura proposta;
+    \item Analisar mecanismos de conformidade contínua e validação de identidade baseados em Zero Trust e SPIRE.
+\end{alineas}
+
+\section{Organização do Trabalho}
+\label{sec:organizacao-trabalho}
+
+Este trabalho está estruturado em seis capítulos. O Capítulo 2 apresenta os fundamentos teóricos necessários para compreensão da pesquisa. O Capítulo 3 apresenta os trabalhos relacionados. O Capítulo 4 descreve a metodologia adotada e a arquitetura proposta. O Capítulo 5 apresenta os resultados obtidos e a discussão. Por fim, o Capítulo 6 apresenta as conclusões, limitações e sugestões de trabalhos futuros.

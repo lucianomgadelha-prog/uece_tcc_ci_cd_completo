@@ -1,0 +1,42 @@
+\begin{figure}[ht!]
+    \centering
+    \Caption{\label{fig:arquitetura-ci-cd}Arquitetura geral da solução proposta}
+    \UECEfig{}{
+    \resizebox{0.98\textwidth}{!}{%
+    \begin{tikzpicture}[
+        node distance=1.25cm,
+        font=\small,
+        bloco/.style={rectangle, rounded corners, draw, align=center, minimum width=2.7cm, minimum height=0.9cm},
+        grupo/.style={rectangle, rounded corners, draw, dashed, inner sep=0.25cm},
+        seta/.style={-{Latex[length=2.4mm]}, thick}
+    ]
+    \node[bloco] (git) {Repositório\\Git};
+    \node[bloco, right=of git] (jenkins) {Jenkins\\Controller};
+    \node[bloco, right=of jenkins] (sast) {SonarQube\\SAST};
+    \node[bloco, right=of sast] (build) {Build\\Container};
+    \node[bloco, below=1.1cm of build] (trivy) {Trivy\\Scan CVE};
+    \node[bloco, left=of trivy] (cosign) {Cosign/Rekor\\Attestation};
+    \node[bloco, left=of cosign] (registry) {Registry\\Imagem};
+    \node[bloco, left=of registry] (helm) {Helm\\Deploy};
+    \node[bloco, below=1.1cm of helm] (k8s) {Cluster\\Kubernetes};
+    \node[bloco, right=of k8s] (spire) {SPIRE\\Identidade};
+    \node[bloco, right=of spire] (monitor) {Métricas\\DORA};
+    \draw[seta] (git) -- (jenkins);
+    \draw[seta] (jenkins) -- (sast);
+    \draw[seta] (sast) -- (build);
+    \draw[seta] (build) -- (trivy);
+    \draw[seta] (trivy) -- (cosign);
+    \draw[seta] (cosign) -- (registry);
+    \draw[seta] (registry) -- (helm);
+    \draw[seta] (helm) -- (k8s);
+    \draw[seta] (k8s) -- (spire);
+    \draw[seta] (k8s) -- (monitor);
+    \begin{scope}[on background layer]
+        \node[grupo, fit=(jenkins)(sast)(build)(trivy)(cosign)(registry)(helm), label={[font=\small]above:Pipeline DevSecOps}] {};
+        \node[grupo, fit=(k8s)(spire)(monitor), label={[font=\small]below:Execução, Segurança e Observabilidade}] {};
+    \end{scope}
+    \end{tikzpicture}%
+    }}{
+        \Fonte{Elaborado pelo autor}
+    }
+\end{figure}

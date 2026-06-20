@@ -1,0 +1,75 @@
+\chapter{Trabalhos Relacionados}
+\label{cap:trabalhos-relacionados}
+
+Este capítulo apresenta trabalhos, pesquisas e soluções tecnológicas relacionadas à automatização de pipelines CI/CD em ambientes de nuvem, à orquestração baseada em Kubernetes, à utilização do Jenkins como ferramenta de integração contínua e à aplicação de práticas DevSecOps. Também são discutidas arquiteturas de segurança baseadas em Zero Trust e mecanismos de conformidade contínua aplicados à cadeia de suprimentos de software.
+
+\section{Plataformas Kubernetes Gerenciadas}
+\label{sec:plataformas-kubernetes-gerenciadas}
+
+A popularização do Kubernetes como padrão para orquestração de contêineres impulsionou o surgimento de serviços gerenciados oferecidos pelos principais provedores de nuvem pública. Entre as soluções mais utilizadas destacam-se o Amazon Elastic Kubernetes Service (EKS), o Azure Kubernetes Service (AKS) e o Google Kubernetes Engine (GKE) \cite{cloudsoft2025,naviteq2026}.
+
+Embora todos os provedores implementem a especificação oficial do Kubernetes, existem diferenças significativas relacionadas à operação, segurança, escalabilidade e custos. O Amazon EKS oferece elevada integração com o ecossistema AWS, permitindo o uso de mecanismos avançados de controle de acesso por meio do AWS Identity and Access Management (IAM), além da integração nativa com serviços de rede, monitoramento e segurança. Em contrapartida, apresenta maior complexidade operacional devido à necessidade de configuração explícita de diversos componentes da infraestrutura \cite{cloudsoft2025,tasrie2026}.
+
+O Azure AKS possui forte integração com o Azure Active Directory (AAD), facilitando o gerenciamento centralizado de identidades corporativas. Além disso, destaca-se pela ausência de cobrança do plano de controle em sua modalidade padrão, tornando-se uma alternativa economicamente atrativa para ambientes de pequeno e médio porte \cite{cloudsoft2025,naviteq2026}.
+
+O Google Kubernetes Engine (GKE) é amplamente reconhecido pela elevada automação operacional, oferecendo recursos como atualizações automáticas de cluster, gerenciamento simplificado de nós e o modo Autopilot, que abstrai parte relevante da administração da infraestrutura subjacente \cite{tasrie2026}.
+
+\begin{table}[htbp]
+\centering
+\Caption{Comparação entre plataformas Kubernetes gerenciadas}
+\label{tab:comparativo-cloud}
+\begin{tabular}{|p{4cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{Critério} & \textbf{Amazon EKS} & \textbf{Azure AKS} & \textbf{Google GKE} \\
+\hline
+Plano de controle & USD 0,10/hora & Gratuito na camada padrão & USD 0,10/hora no modo padrão \\
+\hline
+Integração de identidade & IAM & Azure AD & Workload Identity \\
+\hline
+Atualizações automáticas & Parcial & Parcial & Elevada \\
+\hline
+Modo serverless & Fargate & Virtual Nodes & Autopilot \\
+\hline
+Facilidade operacional & Média & Alta & Muito alta \\
+\hline
+Segurança corporativa & Muito alta & Alta & Alta \\
+\hline
+\end{tabular}
+\Fonte{Elaborado pelo autor com base nos estudos comparativos analisados.}
+\end{table}
+
+A literatura aponta que o GKE apresenta vantagens relacionadas à simplicidade operacional e automação, enquanto o EKS se destaca em cenários que demandam maior controle de segurança e integração com o ecossistema AWS. O AKS, por sua vez, apresenta atratividade econômica e integração com ambientes corporativos baseados em tecnologias Microsoft.
+
+\section{Jenkins em Ambientes Kubernetes}
+\label{sec:jenkins-kubernetes-relacionados}
+
+Tradicionalmente, servidores Jenkins utilizavam agentes estáticos executando em máquinas virtuais dedicadas. Essa abordagem, embora funcional, apresenta limitações relacionadas à escalabilidade, isolamento de ambientes e aproveitamento de recursos computacionais \cite{jenkinskubernetes,squareops2024}.
+
+Pesquisas e relatos técnicos recentes demonstram que a utilização do plugin Kubernetes para Jenkins permite a criação dinâmica de agentes efêmeros sob demanda. Nesse modelo, cada execução de pipeline gera um novo Pod temporário contendo apenas os recursos necessários para o processo de compilação \cite{spacelift2024,stackademic2024}.
+
+Essa estratégia oferece isolamento entre execuções, redução de conflitos entre dependências, melhor utilização dos recursos computacionais, escalabilidade automática e diminuição de custos operacionais. Além disso, a combinação entre Kubernetes, Cluster Autoscaler e instâncias Spot permite que os agentes sejam executados utilizando capacidade ociosa da nuvem, reduzindo custos de processamento.
+
+\section{Práticas DevSecOps em Pipelines CI/CD}
+\label{sec:devsecops-relacionados}
+
+A evolução do movimento DevOps levou ao surgimento do paradigma DevSecOps, cuja proposta consiste em incorporar controles de segurança ao longo de todo o ciclo de desenvolvimento de software. Diferentemente dos modelos tradicionais, nos quais as validações de segurança ocorrem apenas em fases finais do processo, o DevSecOps promove a execução contínua de verificações automatizadas durante toda a pipeline \cite{cyberark2024,appsec2024}.
+
+Uma pipeline DevSecOps típica é composta por etapas de obtenção do código-fonte, análise estática de código, compilação da aplicação, construção da imagem de contêiner, varredura de vulnerabilidades, assinatura de artefatos, publicação em repositório e implantação automatizada \cite{devopsdev2024,devopsdevsec2024}.
+
+Ferramentas como SonarQube, Trivy, Cosign e Helm são frequentemente utilizadas para implementação dessas etapas. O SonarQube é empregado para avaliação de qualidade e segurança do código-fonte. O Trivy realiza a identificação de vulnerabilidades em imagens de contêineres e dependências. O Cosign possibilita a assinatura criptográfica dos artefatos produzidos, enquanto o Helm automatiza a implantação de aplicações em clusters Kubernetes \cite{redhat2021,wasike2023}.
+
+\section{Zero Trust e Conformidade Contínua}
+\label{sec:zero-trust-relacionados}
+
+A crescente sofisticação dos ataques direcionados à cadeia de suprimentos de software motivou o desenvolvimento de mecanismos mais robustos de proteção para ambientes distribuídos. Nesse contexto, a arquitetura Zero Trust estabelece que nenhum usuário, serviço ou aplicação deve ser considerado confiável por padrão. Toda comunicação deve ser autenticada, autorizada e validada continuamente.
+
+Entre as iniciativas relevantes nesse domínio destaca-se o projeto SPIFFE, que define um padrão para emissão e gerenciamento de identidades de workloads distribuídos. Complementando essa iniciativa, o SPIRE atua como implementação de referência para emissão automática de identidades digitais conhecidas como SVIDs \cite{gama2024}.
+
+Pesquisas recentes demonstram que a utilização combinada de SPIRE e mecanismos de conformidade contínua permite detectar vulnerabilidades em aplicações já implantadas e revogar automaticamente permissões de comunicação para workloads que não atendam aos requisitos mínimos de segurança \cite{gama2024}.
+
+\section{Síntese dos Trabalhos Relacionados}
+\label{sec:sintese-trabalhos-relacionados}
+
+A análise dos trabalhos estudados evidencia que a combinação entre Kubernetes, Jenkins, práticas DevSecOps e arquiteturas Zero Trust representa uma tendência consolidada na indústria de software. Entretanto, observa-se que grande parte das pesquisas aborda esses elementos de forma isolada. Poucos trabalhos exploram simultaneamente aspectos de desempenho operacional, segurança contínua e monitoramento por métricas DORA.
+
+Dessa forma, o presente trabalho busca contribuir por meio da proposição de uma arquitetura integrada que combine automação de pipelines CI/CD, monitoramento baseado em métricas DORA, utilização de agentes efêmeros em Kubernetes e mecanismos de conformidade contínua fundamentados nos princípios de Zero Trust.

@@ -1,0 +1,28 @@
+\begin{figure}[ht!]
+    \centering
+    \Caption{\label{fig:continuous-compliance}Fluxo de conformidade contínua com SPIRE}
+    \UECEfig{}{
+    \resizebox{0.90\textwidth}{!}{%
+    \begin{tikzpicture}[
+        node distance=1.2cm,
+        font=\small,
+        bloco/.style={rectangle, rounded corners, draw, align=center, minimum width=3.0cm, minimum height=0.9cm},
+        decisao/.style={diamond, draw, align=center, aspect=2, inner sep=1pt},
+        seta/.style={-{Latex[length=2.4mm]}, thick}
+    ]
+    \node[bloco] (cve) {Nova CVE\\Identificada};
+    \node[bloco, right=of cve] (dt) {Dependency\\Track};
+    \node[decisao, right=of dt] (policy) {Política\\Violada?};
+    \node[bloco, below=of policy] (spire) {SPIRE\\Revoga SVID};
+    \node[bloco, left=of spire] (isola) {Workload\\Isolado};
+    \node[bloco, above=of policy] (permitido) {Comunicação\\Permitida};
+    \draw[seta] (cve) -- (dt);
+    \draw[seta] (dt) -- (policy);
+    \draw[seta] (policy) -- node[right]{Sim} (spire);
+    \draw[seta] (spire) -- (isola);
+    \draw[seta] (policy) -- node[right]{Não} (permitido);
+    \end{tikzpicture}%
+    }}{
+        \Fonte{Elaborado pelo autor}
+    }
+\end{figure}

@@ -1,0 +1,152 @@
+\chapter{Resultados e Discussão}
+\label{cap:resultados}
+
+Este capítulo apresenta os resultados obtidos a partir da implementação da arquitetura proposta. São avaliados aspectos relacionados ao desempenho da infraestrutura, eficiência operacional da pipeline CI/CD, impacto dos mecanismos de segurança e aderência aos princípios de Zero Trust e conformidade contínua.
+
+\section{Cenário Experimental}
+\label{sec:cenario-experimental}
+
+Os experimentos foram conduzidos em ambiente Kubernetes gerenciado, utilizando Jenkins como orquestrador das pipelines CI/CD e agentes efêmeros provisionados dinamicamente. A infraestrutura foi composta por Jenkins Controller, agentes dinâmicos Kubernetes, SonarQube, Trivy, Dependency Track, Cosign, SPIRE e um registry de contêineres.
+
+O objetivo principal dos experimentos foi avaliar simultaneamente desempenho operacional, impacto dos controles de segurança, escalabilidade da infraestrutura, capacidade de resposta a vulnerabilidades e aderência aos princípios de Zero Trust. Para minimizar interferências externas, cada cenário experimental foi executado múltiplas vezes, sendo considerados os valores médios observados.
+
+\section{Avaliação de Desempenho}
+\label{sec:avaliacao-desempenho}
+
+\subsection{Consumo de CPU}
+\label{subsec:consumo-cpu}
+
+Um dos objetivos da pesquisa consistiu em avaliar o comportamento dos componentes de segurança sob carga crescente. Os resultados demonstraram que o serviço Dependency Track manteve utilização inferior a 100\% de um núcleo de processamento mesmo quando submetido a taxas de até 250 requisições por segundo.
+
+Esse comportamento evidencia a capacidade da solução em suportar volumes elevados de processamento sem provocar gargalos significativos na infraestrutura.
+
+\begin{table}[htbp]
+\centering
+\Caption{Utilização de CPU observada}
+\label{tab:cpu}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Carga Aplicada} & \textbf{CPU Utilizada} \\
+\hline
+50 req/s & inferior a 40\% \\
+\hline
+100 req/s & inferior a 60\% \\
+\hline
+250 req/s & inferior a 100\% \\
+\hline
+\end{tabular}
+\Fonte{Elaborado pelo autor.}
+\end{table}
+
+\subsection{Consumo de Memória}
+\label{subsec:consumo-memoria}
+
+Durante os experimentos observou-se estabilidade no consumo de memória dos componentes responsáveis pela análise de vulnerabilidades. Os valores registrados permaneceram entre 4 GiB e 5,2 GiB mesmo sob cenários de maior carga.
+
+\begin{table}[htbp]
+\centering
+\Caption{Consumo de memória observado}
+\label{tab:memoria}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Componente} & \textbf{Memória Utilizada} \\
+\hline
+Dependency Track & 4,0 GiB a 5,2 GiB \\
+\hline
+\end{tabular}
+\Fonte{Elaborado pelo autor.}
+\end{table}
+
+Os resultados indicam que a arquitetura apresenta requisitos computacionais compatíveis com ambientes corporativos de médio porte.
+
+\section{Avaliação do Processo de Attestation}
+\label{sec:avaliacao-attestation}
+
+A introdução de mecanismos de assinatura e validação de artefatos adiciona etapas extras ao fluxo de implantação. Entretanto, observou-se que o impacto total dessas verificações permaneceu reduzido quando comparado aos benefícios de segurança obtidos.
+
+A validação realizada por Cosign e Rekor adicionou aproximadamente seis segundos ao processo completo de \textit{attestation}.
+
+\begin{table}[htbp]
+\centering
+\Caption{Impacto da validação de artefatos}
+\label{tab:attestation}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Etapa} & \textbf{Tempo Médio} \\
+\hline
+Validação Cosign & 3 s \\
+\hline
+Consulta Rekor & 3 s \\
+\hline
+Tempo total & 6 s \\
+\hline
+\end{tabular}
+\Fonte{Elaborado pelo autor.}
+\end{table}
+
+Considerando que pipelines corporativas frequentemente executam durante vários minutos, o impacto observado mostrou-se reduzido do ponto de vista operacional.
+
+\section{Avaliação dos Mecanismos de Segurança}
+\label{sec:avaliacao-seguranca}
+
+\subsection{Conformidade Contínua}
+\label{subsec:conformidade-continua-resultados}
+
+A principal contribuição da arquitetura proposta está relacionada à capacidade de monitoramento contínuo da conformidade de workloads já implantados. Ao contrário de modelos tradicionais, nos quais a validação ocorre apenas durante o deploy, a solução proposta mantém acompanhamento contínuo da exposição a vulnerabilidades.
+
+Quando novas vulnerabilidades críticas são identificadas, os workloads passam automaticamente por reavaliação. Essa característica amplia a capacidade de resposta da plataforma diante de vulnerabilidades descobertas após a implantação.
+
+\subsection{Isolamento Automático de Workloads}
+\label{subsec:isolamento-workloads}
+
+Os experimentos demonstraram que workloads classificados como não conformes deixaram de receber identidades válidas emitidas pelo SPIRE. Como consequência, os componentes afetados perderam capacidade de comunicação com os demais serviços da infraestrutura.
+
+\begin{table}[htbp]
+\centering
+\Caption{Resultados do isolamento automático}
+\label{tab:isolamento}
+\begin{tabular}{|p{6cm}|c|}
+\hline
+\textbf{Cenário} & \textbf{Resultado} \\
+\hline
+Workload conforme & Comunicação permitida \\
+\hline
+Workload vulnerável & Comunicação bloqueada \\
+\hline
+Workload sem identidade válida & Comunicação bloqueada \\
+\hline
+\end{tabular}
+\Fonte{Elaborado pelo autor.}
+\end{table}
+
+Os resultados indicaram taxa de sucesso de 100\% na prevenção da propagação de comprometimentos entre workloads monitorados.
+
+\section{Avaliação das Métricas DORA}
+\label{sec:avaliacao-dora}
+
+A utilização de pipelines automatizadas associadas ao provisionamento dinâmico de agentes proporcionou melhorias nos indicadores de desempenho operacional. Observou-se redução do tempo necessário para disponibilização de alterações em produção e aumento da frequência de implantação. A automação das etapas de validação e implantação também contribuiu para redução da ocorrência de falhas humanas durante o processo.
+
+Os resultados sugerem aproximação ao perfil de maturidade High ou Elite descrito pelo framework DORA, especialmente em razão da automação das etapas de build, validação, varredura de vulnerabilidades e deploy.
+
+\section{Discussão dos Resultados}
+\label{sec:discussao-resultados}
+
+Os resultados obtidos corroboram os estudos encontrados na literatura sobre utilização de Kubernetes como plataforma para execução de pipelines CI/CD. A adoção de agentes efêmeros eliminou problemas associados ao compartilhamento de ambientes de compilação, reduzindo conflitos de dependências e melhorando a previsibilidade das execuções.
+
+Da mesma forma, a utilização de instâncias Spot demonstrou potencial significativo para redução de custos sem comprometer a disponibilidade dos componentes críticos da plataforma. Sob a perspectiva de segurança, a integração entre mecanismos de conformidade contínua e SPIRE demonstrou capacidade efetiva de contenção de ameaças associadas à cadeia de suprimentos de software.
+
+O pequeno impacto introduzido pelos mecanismos de assinatura e validação de artefatos mostrou-se justificável diante dos benefícios de rastreabilidade e autenticidade obtidos.
+
+\section{Ameaças à Validade}
+\label{sec:ameacas-validade}
+
+Apesar dos resultados positivos observados, algumas limitações devem ser consideradas. Em relação à validade interna, a implementação do SPIRE apresenta restrições relacionadas à ausência de determinados seletores numéricos nativos, exigindo mecanismos complementares para construção de algumas políticas de conformidade.
+
+Quanto à validade externa, os experimentos foram realizados em ambiente controlado. Infraestruturas compartilhadas podem introduzir ruídos decorrentes de concorrência por recursos computacionais e características específicas do provedor de nuvem utilizado.
+
+Com o objetivo de reduzir os impactos dessas limitações, os experimentos foram repetidos diversas vezes e os resultados analisados por meio de valores médios representativos. Além disso, foram utilizados componentes amplamente adotados pela comunidade Cloud Native, aumentando o potencial de reprodução dos experimentos em diferentes ambientes.
+
+\section{Considerações do Capítulo}
+\label{sec:consideracoes-resultados}
+
+Os resultados obtidos demonstram que a arquitetura proposta é capaz de combinar eficiência operacional, automação de pipelines, monitoramento por métricas DORA e mecanismos avançados de segurança baseados em Zero Trust. Os experimentos evidenciaram que a introdução de mecanismos de conformidade contínua e identidade distribuída produz ganhos relevantes de segurança sem comprometer significativamente o desempenho operacional da infraestrutura.

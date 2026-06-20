@@ -1,0 +1,114 @@
+\chapter{Fundamentação Teórica}
+\label{cap:fundamentacao-teorica}
+
+Este capítulo apresenta os conceitos fundamentais necessários para compreensão da arquitetura proposta neste trabalho. São abordados os princípios de DevOps, Integração Contínua, Entrega Contínua, Kubernetes, Jenkins, DevSecOps, métricas DORA e arquiteturas de segurança baseadas em Zero Trust e SPIFFE/SPIRE.
+
+\section{DevOps}
+\label{sec:devops}
+
+O termo DevOps surgiu da combinação das palavras \textit{Development} e \textit{Operations}, representando uma abordagem cultural e tecnológica que busca aproximar equipes tradicionalmente separadas de desenvolvimento e operações. Historicamente, equipes de desenvolvimento eram responsáveis pela criação do software, enquanto equipes de infraestrutura e operações assumiam a responsabilidade pela implantação e manutenção dos sistemas em produção. Essa separação frequentemente gerava conflitos, atrasos e dificuldades de comunicação.
+
+A filosofia DevOps busca eliminar essas barreiras por meio da colaboração contínua, automação de processos e compartilhamento de responsabilidades. O objetivo principal consiste em reduzir o ciclo de entrega de software sem comprometer a qualidade, estabilidade e segurança das aplicações \cite{dora2024,gitlab2024}.
+
+Entre os principais benefícios associados à adoção de DevOps destacam-se a redução do tempo de entrega de funcionalidades, o aumento da frequência de implantação, a melhoria da qualidade do software, a redução de falhas em produção e a maior capacidade de resposta a incidentes.
+
+\section{Integração Contínua e Entrega Contínua}
+\label{sec:ci-cd}
+
+A Integração Contínua (\textit{Continuous Integration} -- CI) consiste na prática de integrar frequentemente alterações realizadas por diferentes desenvolvedores em um repositório centralizado. Cada alteração submetida ao repositório dispara automaticamente um conjunto de validações, incluindo compilação, execução de testes e verificações de qualidade.
+
+Complementando a Integração Contínua, a Entrega Contínua (\textit{Continuous Delivery}) automatiza o processo de disponibilização de novas versões em ambientes de homologação ou produção. A Implantação Contínua (\textit{Continuous Deployment}) representa uma evolução adicional, permitindo que alterações aprovadas sejam implantadas automaticamente em produção sem intervenção humana.
+
+\section{Kubernetes}
+\label{sec:kubernetes}
+
+O Kubernetes é uma plataforma de código aberto desenvolvida para automação da implantação, escalabilidade e gerenciamento de aplicações conteinerizadas. Originalmente criado pela Google e posteriormente doado para a Cloud Native Computing Foundation, tornou-se o padrão predominante para orquestração de contêineres.
+
+A arquitetura do Kubernetes é composta por dois grupos principais de componentes: o plano de controle (\textit{Control Plane}) e os nós de trabalho (\textit{Worker Nodes}). O plano de controle é responsável pelo gerenciamento do estado do cluster, enquanto os nós de trabalho executam efetivamente os contêineres das aplicações \cite{spacelift2024,jenkinskubernetes}.
+
+Entre os principais recursos oferecidos pelo Kubernetes destacam-se escalabilidade horizontal, balanceamento de carga, recuperação automática de falhas, gerenciamento declarativo, descoberta de serviços e atualizações sem indisponibilidade.
+
+\section{Jenkins}
+\label{sec:jenkins}
+
+O Jenkins é uma das ferramentas de automação de integração contínua mais utilizadas na indústria de software. Sua arquitetura baseia-se na execução de pipelines declarativas compostas por estágios sequenciais que automatizam atividades de compilação, testes, validação e implantação.
+
+Em ambientes Kubernetes, o Jenkins pode ser executado utilizando uma arquitetura baseada em controlador central (\textit{Controller}) e agentes efêmeros (\textit{Agents}). Nessa abordagem, cada pipeline cria dinamicamente um novo Pod para execução das tarefas necessárias, eliminando dependências entre execuções e aumentando o isolamento dos ambientes \cite{jenkinskubernetes,squareops2024}.
+
+\section{DevSecOps}
+\label{sec:devsecops}
+
+O crescimento dos riscos relacionados à cadeia de suprimentos de software impulsionou o surgimento do paradigma DevSecOps. Diferentemente do modelo tradicional, no qual a segurança é aplicada apenas nas etapas finais do ciclo de desenvolvimento, o DevSecOps incorpora controles de segurança desde as fases iniciais da pipeline \cite{cyberark2024,appsec2024}.
+
+Essa abordagem permite detectar vulnerabilidades de forma antecipada, reduzindo custos de correção e minimizando riscos operacionais. Ferramentas amplamente utilizadas nesse contexto incluem SonarQube para análise estática de código, Trivy para análise de vulnerabilidades, HashiCorp Vault para gerenciamento de segredos, Cosign para assinatura de artefatos e Helm para implantação automatizada.
+
+\section{Métricas DORA}
+\label{sec:metricas-dora}
+
+O grupo \textit{DevOps Research and Assessment} (DORA) desenvolveu um conjunto de métricas destinadas à avaliação objetiva do desempenho de equipes de engenharia de software. Essas métricas permitem medir simultaneamente velocidade de entrega e estabilidade operacional \cite{dora2024,dx2024}.
+
+\subsection{Deployment Frequency}
+\label{subsec:deployment-frequency}
+
+A Frequência de Implantação mede a quantidade de implantações realizadas em determinado período. Organizações classificadas como Elite realizam múltiplas implantações por dia, enquanto organizações classificadas como Low realizam implantações mensais ou semestrais.
+
+\subsection{Lead Time for Changes}
+\label{subsec:lead-time}
+
+O Lead Time representa o tempo necessário para que uma alteração submetida ao repositório seja disponibilizada em produção. Valores reduzidos indicam maior eficiência do processo de desenvolvimento.
+
+\subsection{Change Failure Rate}
+\label{subsec:change-failure-rate}
+
+A Taxa de Falha em Mudanças representa o percentual de implantações que geram incidentes ou demandam ações corretivas. Essa métrica está diretamente associada à qualidade do processo de entrega.
+
+\subsection{Mean Time to Recovery}
+\label{subsec:mttr}
+
+O Tempo Médio de Recuperação mede a capacidade da organização em restaurar serviços após a ocorrência de falhas. Organizações de alta maturidade apresentam valores significativamente menores para essa métrica.
+
+\begin{table}[htbp]
+\centering
+\Caption{Classificação de maturidade DORA}
+\label{tab:dora}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nível} & \textbf{Frequência de Deploy} & \textbf{MTTR} \\
+\hline
+Elite & Múltiplas vezes ao dia & Menos de 1 hora \\
+\hline
+High & Entre diário e semanal & Menos de 1 dia \\
+\hline
+Medium & Entre semanal e mensal & Até 1 semana \\
+\hline
+Low & Mensal ou superior & Acima de 1 semana \\
+\hline
+\end{tabular}
+\Fonte{Adaptado do framework DORA.}
+\end{table}
+
+\section{Zero Trust Architecture}
+\label{sec:zta}
+
+A Zero Trust Architecture (ZTA) é um modelo de segurança baseado no princípio de que nenhum elemento deve ser considerado confiável por padrão. Enquanto arquiteturas tradicionais concentram seus mecanismos de proteção nas fronteiras da rede, o modelo Zero Trust exige validação contínua de identidade e contexto para qualquer solicitação de acesso.
+
+Os princípios fundamentais dessa arquitetura incluem verificação contínua, privilégio mínimo, autenticação forte, segmentação lógica e monitoramento constante.
+
+\section{SPIFFE e SPIRE}
+\label{sec:spiffe-spire}
+
+O SPIFFE (\textit{Secure Production Identity Framework For Everyone}) é um padrão aberto desenvolvido para fornecer identidades seguras e verificáveis para workloads distribuídos. Seu principal objetivo é eliminar a dependência de credenciais estáticas e certificados gerenciados manualmente.
+
+O SPIRE (\textit{SPIFFE Runtime Environment}) representa a implementação de referência do padrão SPIFFE. O SPIRE é responsável pela emissão automática de identidades, renovação de certificados, autenticação de workloads e validação de conformidade. As identidades emitidas pelo SPIRE são conhecidas como SPIFFE Verifiable Identity Documents (SVIDs) \cite{gama2024}.
+
+\section{Conformidade Contínua}
+\label{sec:continuous-compliance}
+
+A conformidade contínua (\textit{Continuous Compliance}) consiste na capacidade de monitorar continuamente aplicações já implantadas em produção, verificando se permanecem aderentes às políticas de segurança estabelecidas. Essa abordagem supera modelos tradicionais baseados apenas em verificações realizadas durante a etapa de implantação.
+
+Ao integrar mecanismos de conformidade contínua com SPIRE, torna-se possível revogar automaticamente identidades associadas a workloads vulneráveis, impedindo a propagação de comprometimentos para outros componentes da infraestrutura. Dessa forma, a organização passa a adotar um modelo dinâmico de confiança, alinhado aos princípios da arquitetura Zero Trust \cite{gama2024}.
+
+\section{Considerações do Capítulo}
+\label{sec:consideracoes-fundamentacao}
+
+Os conceitos apresentados neste capítulo fornecem a base teórica necessária para compreensão da arquitetura proposta neste trabalho. Nos capítulos seguintes serão detalhados os procedimentos metodológicos utilizados para implementação da solução, bem como os resultados obtidos a partir da aplicação prática dos conceitos discutidos.

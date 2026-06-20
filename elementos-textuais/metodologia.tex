@@ -1,0 +1,165 @@
+\chapter{Metodologia}
+\label{chap:metodologia}
+
+Este capítulo apresenta os procedimentos metodológicos adotados para o desenvolvimento da pesquisa, bem como a arquitetura proposta para automatização de pipelines CI/CD em ambientes de nuvem. São descritos os componentes utilizados, a infraestrutura empregada, o fluxo de execução da pipeline DevSecOps e os mecanismos de monitoramento e segurança implementados.
+
+\section{Caracterização da Pesquisa}
+
+Quanto aos objetivos, esta pesquisa caracteriza-se como aplicada, pois busca utilizar conceitos consolidados da Engenharia de Software, Computação em Nuvem e Segurança da Informação para solucionar problemas relacionados à automação de entregas de software e à proteção da cadeia de suprimentos.
+
+Sob a perspectiva metodológica, o trabalho combina pesquisa bibliográfica e estudo experimental. A pesquisa bibliográfica foi utilizada para fundamentar os conceitos relacionados a DevOps, Kubernetes, DevSecOps, métricas DORA e Zero Trust. O estudo experimental foi empregado para avaliar a arquitetura proposta em um ambiente de nuvem baseado em Kubernetes.
+
+\section{Arquitetura Proposta}
+
+A arquitetura proposta tem como objetivo integrar automação de pipelines CI/CD, monitoramento de desempenho operacional e mecanismos de segurança contínua em uma única plataforma.
+
+A Figura \ref{fig:arquitetura-ci-cd} apresenta a visão conceitual da solução desenvolvida.
+
+\input{figuras/arquitetura-ci-cd}
+
+A arquitetura é composta por três camadas principais:
+
+\begin{itemize}
+    \item Camada de Integração Contínua;
+    \item Camada de Segurança e Conformidade;
+    \item Camada de Execução e Monitoramento.
+\end{itemize}
+
+\section{Infraestrutura de Nuvem}
+
+Para viabilizar a execução da solução foi considerado um ambiente Kubernetes gerenciado em nuvem pública. A escolha por serviços gerenciados reduz a complexidade operacional relacionada ao gerenciamento do plano de controle do Kubernetes, permitindo maior foco nos aspectos de automação, segurança e observabilidade.
+
+A infraestrutura é composta pelos seguintes elementos:
+
+\begin{itemize}
+    \item Cluster Kubernetes gerenciado;
+    \item Jenkins Controller;
+    \item Agentes dinâmicos Jenkins;
+    \item SonarQube;
+    \item Trivy;
+    \item Registry de imagens;
+    \item SPIRE Server;
+    \item SPIRE Agents;
+    \item Sistema de monitoramento.
+\end{itemize}
+
+\section{Segregação de Nós}
+
+Visando otimização de custos e aumento da disponibilidade operacional, foi adotada uma estratégia de segregação de workloads em grupos distintos de nós. O Jenkins Controller é executado em instâncias do tipo On-Demand, garantindo disponibilidade contínua e reduzindo riscos associados à interrupção inesperada dos serviços centrais da plataforma.
+
+Por outro lado, os agentes dinâmicos responsáveis pela execução das pipelines utilizam instâncias Spot. Essa abordagem permite aproveitar capacidade ociosa disponibilizada pelo provedor de nuvem, reduzindo significativamente os custos operacionais.
+
+\section{Provisionamento Dinâmico de Agentes}
+
+A execução das pipelines utiliza o plugin Kubernetes para Jenkins. Nesse modelo, novos Pods são criados sob demanda sempre que uma pipeline é iniciada. Cada agente possui ciclo de vida temporário, sendo automaticamente removido após a conclusão da execução.
+
+A Figura \ref{fig:jenkins-kubernetes} apresenta o fluxo simplificado de provisionamento dos agentes dinâmicos.
+
+\input{figuras/jenkins-kubernetes}
+
+A utilização de agentes efêmeros proporciona:
+
+\begin{itemize}
+    \item isolamento completo entre builds;
+    \item redução de conflitos de dependências;
+    \item melhor utilização de recursos;
+    \item escalabilidade automática;
+    \item aumento da segurança operacional.
+\end{itemize}
+
+\section{Pipeline DevSecOps}
+
+A pipeline implementada neste trabalho segue os princípios do paradigma DevSecOps. A Figura \ref{fig:pipeline-devsecops} apresenta o fluxo completo adotado.
+
+\input{figuras/pipeline-devsecops}
+
+\subsection{Etapa de Checkout}
+
+A pipeline inicia realizando a obtenção do código-fonte a partir do sistema de controle de versão.
+
+\subsection{Análise Estática de Código}
+
+A qualidade e segurança do código são avaliadas utilizando o SonarQube. Caso os critérios estabelecidos pelo Quality Gate não sejam atendidos, a execução da pipeline é interrompida automaticamente.
+
+\subsection{Construção dos Artefatos}
+
+Após aprovação na etapa de análise estática, é realizada a compilação da aplicação e a construção da imagem de contêiner.
+
+\subsection{Varredura de Vulnerabilidades}
+
+A imagem produzida é submetida à análise utilizando o Trivy. A pipeline é configurada para rejeitar automaticamente imagens contendo vulnerabilidades classificadas como críticas.
+
+\subsection{Assinatura de Artefatos}
+
+As imagens aprovadas são assinadas digitalmente utilizando Cosign. Essa etapa garante rastreabilidade e autenticidade dos artefatos distribuídos.
+
+\subsection{Publicação e Implantação}
+
+Após validação de segurança, as imagens são publicadas em repositório centralizado e implantadas automaticamente utilizando Helm.
+
+\section{Monitoramento das Métricas DORA}
+
+Para avaliação do desempenho operacional da arquitetura foram utilizadas as métricas propostas pelo framework DORA. A coleta dos dados é realizada a partir das informações registradas pelo Jenkins e pelos componentes do cluster Kubernetes.
+
+As métricas monitoradas são:
+
+\begin{itemize}
+    \item Deployment Frequency;
+    \item Lead Time for Changes;
+    \item Change Failure Rate;
+    \item Mean Time to Recovery.
+\end{itemize}
+
+\begin{table}[ht!]
+\centering
+\Caption{\label{tab:dora-metricas}Métricas monitoradas}
+\UECEtab{}{
+\begin{tabular}{p{5cm}p{8cm}}
+\toprule
+\textbf{Métrica} & \textbf{Objetivo} \\
+\midrule\midrule
+Deployment Frequency & Avaliar velocidade de entrega \\
+Lead Time for Changes & Avaliar eficiência do fluxo de desenvolvimento \\
+Change Failure Rate & Avaliar estabilidade das implantações \\
+Mean Time to Recovery & Avaliar capacidade de recuperação \\
+\bottomrule
+\end{tabular}
+}{
+\Fonte{Elaborado pelo autor}
+}
+\end{table}
+
+\section{Implementação de Zero Trust}
+
+A arquitetura incorpora mecanismos de segurança fundamentados nos princípios da Zero Trust Architecture. Toda comunicação entre workloads depende da validação de identidade emitida pelo SPIRE.
+
+O SPIRE é responsável por emitir identidades criptográficas para cada workload autorizado. Workloads que não atendem aos requisitos de conformidade definidos deixam de receber identidades válidas, impossibilitando sua comunicação com os demais componentes da infraestrutura.
+
+\section{Conformidade Contínua}
+
+A conformidade contínua é implementada através da integração entre ferramentas de análise de vulnerabilidades e mecanismos de identidade distribuída.
+
+A Figura \ref{fig:continuous-compliance} apresenta o fluxo conceitual de reavaliação e isolamento de workloads não conformes.
+
+\input{figuras/continuous-compliance}
+
+Quando novas vulnerabilidades críticas são identificadas, os componentes afetados passam por reavaliação automática. Caso sejam identificadas violações das políticas de segurança, o SPIRE pode revogar as credenciais associadas ao workload comprometido.
+
+Essa abordagem reduz significativamente o risco de movimentação lateral e propagação de comprometimentos dentro da infraestrutura.
+
+\section{Procedimentos Experimentais}
+
+Os experimentos foram executados em ambiente controlado baseado em Kubernetes. Para reduzir interferências externas e aumentar a confiabilidade dos resultados, cada cenário experimental foi executado múltiplas vezes, permitindo a obtenção de valores médios representativos.
+
+Durante os experimentos foram coletadas informações relacionadas a:
+
+\begin{itemize}
+    \item utilização de CPU;
+    \item consumo de memória;
+    \item latência de validação de identidade;
+    \item desempenho operacional das pipelines;
+    \item métricas DORA;
+    \item comportamento dos mecanismos de isolamento.
+\end{itemize}
+
+Os resultados obtidos são apresentados e discutidos no capítulo seguinte.

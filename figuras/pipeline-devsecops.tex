@@ -1,0 +1,31 @@
+\begin{figure}[ht!]
+    \centering
+    \Caption{\label{fig:pipeline-devsecops}Fluxo da pipeline DevSecOps proposta}
+    \UECEfig{}{
+    \resizebox{0.98\textwidth}{!}{%
+    \begin{tikzpicture}[
+        node distance=0.95cm,
+        font=\small,
+        etapa/.style={rectangle, rounded corners, draw, align=center, minimum width=2.15cm, minimum height=0.85cm},
+        seta/.style={-{Latex[length=2.2mm]}, thick}
+    ]
+    \node[etapa] (checkout) {Checkout};
+    \node[etapa, right=of checkout] (sast) {SAST\\SonarQube};
+    \node[etapa, right=of sast] (build) {Build\\Docker};
+    \node[etapa, right=of build] (scan) {Scan\\Trivy};
+    \node[etapa, below=1.0cm of scan] (sign) {Assinatura\\Cosign};
+    \node[etapa, left=of sign] (push) {Push\\Registry};
+    \node[etapa, left=of push] (deploy) {Deploy\\Helm};
+    \node[etapa, left=of deploy] (monitor) {Métricas\\DORA};
+    \draw[seta] (checkout) -- (sast);
+    \draw[seta] (sast) -- (build);
+    \draw[seta] (build) -- (scan);
+    \draw[seta] (scan) -- (sign);
+    \draw[seta] (sign) -- (push);
+    \draw[seta] (push) -- (deploy);
+    \draw[seta] (deploy) -- (monitor);
+    \end{tikzpicture}%
+    }}{
+        \Fonte{Elaborado pelo autor}
+    }
+\end{figure}

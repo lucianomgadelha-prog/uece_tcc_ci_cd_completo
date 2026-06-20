@@ -1,0 +1,57 @@
+\chapter{Conclusão}
+\label{cap:conclusao}
+
+A transformação digital observada nas últimas décadas elevou significativamente a importância da automação de processos de desenvolvimento e entrega de software. Nesse contexto, práticas DevOps, pipelines CI/CD e plataformas de orquestração de contêineres tornaram-se componentes fundamentais para organizações que buscam aumentar a velocidade de entrega sem comprometer requisitos de qualidade, disponibilidade e segurança.
+
+Este trabalho teve como objetivo propor e analisar uma arquitetura de referência para automatização de pipelines CI/CD em ambientes de nuvem, utilizando Jenkins e Kubernetes como componentes centrais da infraestrutura, complementados por mecanismos de monitoramento baseados em métricas DORA e controles de segurança fundamentados nos princípios da Zero Trust Architecture.
+
+Inicialmente, foi realizada uma revisão bibliográfica envolvendo conceitos de DevOps, Integração Contínua, Entrega Contínua, Kubernetes, DevSecOps, métricas DORA, SPIFFE, SPIRE e conformidade contínua. A análise dos trabalhos relacionados evidenciou a crescente adoção dessas tecnologias pela indústria, bem como a necessidade de integração entre mecanismos de automação, observabilidade e segurança.
+
+Com base nos estudos realizados, foi proposta uma arquitetura composta por Jenkins executando sobre Kubernetes, utilizando agentes efêmeros provisionados dinamicamente sob demanda. A solução incorporou ferramentas de análise estática de código, varredura de vulnerabilidades, assinatura de artefatos, gerenciamento de identidade distribuída e monitoramento operacional.
+
+Os resultados obtidos demonstraram que a utilização de agentes dinâmicos contribui para otimização da utilização de recursos computacionais, proporcionando maior escalabilidade e isolamento das execuções. A segregação entre workloads executados em instâncias On-Demand e Spot mostrou-se uma estratégia eficiente para redução de custos operacionais sem comprometer a disponibilidade dos componentes críticos da infraestrutura.
+
+Sob a perspectiva de segurança, os experimentos evidenciaram a efetividade da integração entre mecanismos de conformidade contínua e identidades distribuídas emitidas pelo SPIRE. Os resultados demonstraram que workloads considerados não conformes puderam ser automaticamente isolados da infraestrutura, reduzindo riscos associados à propagação de comprometimentos na cadeia de suprimentos de software.
+
+Os testes realizados também indicaram que a introdução de mecanismos adicionais de validação, como assinatura e verificação de artefatos por meio de Cosign e Rekor, produz impacto reduzido no tempo total de execução das pipelines, mantendo equilíbrio adequado entre desempenho operacional e segurança.
+
+No que se refere às métricas DORA, a arquitetura proposta apresentou características compatíveis com organizações de alta maturidade operacional, demonstrando potencial para aumento da frequência de implantações, redução do tempo de entrega de mudanças e diminuição do tempo necessário para recuperação de incidentes.
+
+Dessa forma, conclui-se que a combinação entre Kubernetes, Jenkins, DevSecOps, métricas DORA e Zero Trust constitui uma abordagem viável para construção de plataformas modernas de entrega contínua, proporcionando ganhos simultâneos em escalabilidade, observabilidade, segurança e eficiência operacional.
+
+\section{Contribuições do Trabalho}
+\label{sec:contribuicoes}
+
+As principais contribuições deste trabalho podem ser sintetizadas nos seguintes pontos:
+
+\begin{alineas}
+    \item Consolidação dos principais conceitos relacionados a DevOps, Kubernetes, DevSecOps, métricas DORA e Zero Trust;
+    \item Análise comparativa entre plataformas Kubernetes gerenciadas em nuvem pública;
+    \item Proposição de uma arquitetura de referência para execução de pipelines CI/CD utilizando Jenkins e Kubernetes;
+    \item Integração de mecanismos de conformidade contínua utilizando SPIRE;
+    \item Avaliação experimental dos impactos de desempenho e segurança da arquitetura proposta;
+    \item Aplicação prática de métricas DORA como mecanismo de monitoramento da eficiência operacional.
+\end{alineas}
+
+\section{Limitações}
+\label{sec:limitacoes}
+
+Embora os resultados obtidos tenham sido satisfatórios, algumas limitações foram identificadas durante a execução da pesquisa. A principal limitação está relacionada ao ambiente experimental utilizado, o qual não reproduz integralmente a complexidade encontrada em grandes ambientes corporativos de produção.
+
+Além disso, determinadas restrições técnicas associadas ao SPIRE, especialmente relacionadas à construção de políticas avançadas de conformidade, exigiram adaptações durante a implementação dos experimentos. Outro fator relevante refere-se à constante evolução das tecnologias estudadas, o que pode exigir atualizações periódicas da arquitetura proposta para manutenção de sua aderência às melhores práticas do mercado.
+
+\section{Trabalhos Futuros}
+\label{sec:trabalhos-futuros}
+
+Como continuidade desta pesquisa, sugere-se a realização dos seguintes trabalhos futuros:
+
+\begin{alineas}
+    \item Integração da arquitetura proposta com mecanismos de política declarativa utilizando Open Policy Agent (OPA) e Gatekeeper;
+    \item Avaliação da utilização de Kyverno para aplicação automática de políticas de segurança em clusters Kubernetes;
+    \item Implementação de mecanismos de Software Bill of Materials (SBOM) integrados ao processo de conformidade contínua;
+    \item Avaliação da arquitetura em ambientes multicloud envolvendo simultaneamente AWS, Azure e Google Cloud;
+    \item Ampliação do monitoramento operacional utilizando OpenTelemetry e observabilidade distribuída;
+    \item Investigação do uso de Inteligência Artificial para identificação automática de anomalias em pipelines CI/CD.
+\end{alineas}
+
+Por fim, espera-se que os resultados apresentados contribuam tanto para o meio acadêmico quanto para a indústria de software, servindo como referência para futuras iniciativas relacionadas à modernização de pipelines CI/CD, segurança da cadeia de suprimentos e adoção de arquiteturas Cloud Native.
