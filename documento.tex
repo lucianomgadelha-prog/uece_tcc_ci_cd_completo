@@ -29,8 +29,8 @@
 
 % Opcoes disponiveis
 
-\trabalhoacademico{tccgraduacao}
-%\trabalhoacademico{tccespecializacao}
+%\trabalhoacademico{tccgraduacao}
+\trabalhoacademico{tccespecializacao}
 %\trabalhoacademico{dissertacao}
 %\trabalhoacademico{tese}
 
@@ -67,7 +67,7 @@
 %%     Informação para TCC de Especializacao       %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\especializacaoem{Alfabetização de Crianças}
+\especializacaoem{Engenharia de Software com DevOps}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%         Informação para Dissertacao             %%
@@ -103,7 +103,7 @@
 %%     Informação sobre o Orientador       %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\orientador{Prof. Dr. Andrey Elísio Monteiro Brito}
+\orientador{Prof. Me. Francisco Adaias Gomes da Silva}
 \orientadories{Universidade Estadual do Ceará – UECE}
 \orientadorcentro{Centro de Ciências e Tecnologia - CCT}
 \orientadorfeminino{nao} % Coloque 'sim' se for do sexo feminino
@@ -153,8 +153,6 @@
 	% Elementos pré-textuais
 	\imprimircapa
 	\imprimirfolhaderosto{}
-	\imprimirfichacatalografica{elementos-pre-textuais/ficha-catalografica}
-	\imprimirerrata{elementos-pre-textuais/errata}
 	\imprimirfolhadeaprovacao
 	\imprimirdedicatoria{elementos-pre-textuais/dedicatoria}
 	\imprimiragradecimentos{elementos-pre-textuais/agradecimentos}
@@ -163,11 +161,10 @@
 	\imprimirabstract{elementos-pre-textuais/abstract}
 	\imprimirlistadeilustracoes
 	\imprimirlistadetabelas
-	\imprimirlistadequadros
-	\imprimirlistadealgoritmos
-	\imprimirlistadecodigosfonte
-	\imprimirlistadeabreviaturasesiglas	
-	\imprimirlistadesimbolos{elementos-pre-textuais/lista-de-simbolos}   
+	%\imprimirlistadequadros
+	%\imprimirlistadealgoritmos
+	%\imprimirlistadecodigosfonte
+	%\imprimirlistadeabreviaturasesiglas	   
 	\imprimirsumario
 	
 	%Elementos textuais
@@ -181,16 +178,15 @@
 	
 	%Elementos pós-textuais	
 	\bibliography{elementos-pos-textuais/referencias}
-	\imprimirglossario	
-	\imprimirapendices
+%\imprimirapendices
 		% Adicione aqui os apendices do seu trabalho
-		\input{elementos-pos-textuais/apendices/historico-de-mudancas}
-		\input{elementos-pos-textuais/apendices/lorem-ipsum}
-		\input{elementos-pos-textuais/apendices/termo-de-fiel-depositario}	
-	\imprimiranexos
+		%\input{elementos-pos-textuais/apendices/historico-de-mudancas}
+		%\\input{elementos-pos-textuais/apendices/lorem-ipsum}
+		%\\input{elementos-pos-textuais/apendices/termo-de-fiel-depositario}	
+	%\\imprimiranexos
 		% Adicione aqui os anexos do seu trabalho
-		\input{elementos-pos-textuais/anexos/exemplo-de-anexo}		
-		\input{elementos-pos-textuais/anexos/dinamica-das-classes-sociais}
-	\imprimirindice
+		%\\input{elementos-pos-textuais/anexos/exemplo-de-anexo}		
+		%\\input{elementos-pos-textuais/anexos/dinamica-das-classes-sociais}
+	%\\imprimirindice
 
 \end{document}
