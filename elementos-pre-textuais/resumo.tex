@@ -1,3 +1,21 @@
-A automação de processos de desenvolvimento e entrega de software tornou-se essencial para organizações que buscam reduzir ciclos de entrega sem comprometer qualidade, estabilidade e segurança. Este trabalho propõe e analisa uma arquitetura de referência para implementação de pipelines CI/CD em ambientes de nuvem, utilizando Jenkins e Kubernetes como base operacional, métricas DORA como mecanismo de avaliação de desempenho e princípios de Zero Trust para fortalecimento da segurança. A metodologia combina revisão bibliográfica e estudo experimental, considerando agentes efêmeros em Kubernetes, segregação de nós entre instâncias On-Demand e Spot, análise estática de código, varredura de vulnerabilidades, assinatura de artefatos e conformidade contínua com SPIRE. Os resultados indicam que a arquitetura proposta contribui para maior escalabilidade, isolamento das execuções, redução de custos computacionais e mitigação de ameaças associadas à cadeia de suprimentos de software. Observou-se que os mecanismos de validação adicionam baixo impacto operacional, enquanto aumentam a rastreabilidade e a confiança nos artefatos implantados. Conclui-se que a integração entre DevOps, Kubernetes, métricas DORA e Zero Trust constitui uma abordagem viável para construção de plataformas modernas de entrega contínua.
+A automação de processos de desenvolvimento e entrega de software tornou-se essencial para as organizações que buscam reduzir ciclos de entrega sem comprometer a qualidade, estabilidade e segurança.
 
-\textbf{Palavras-chave}: DevOps. CI/CD. Kubernetes. Métricas DORA. Zero Trust. SPIRE.
+Entretanto percebe-se que há uma dificuldade das empresas adotarem esses princípios de otimização no desenvolvimento e entrega de pipelines em seus processos.
+
+Assim sendo, foi desenvolvida no presente trabalho uma arquitetura para automação de pipelines CI/CD baseada em Kubernetes, considerando mecanismos de desempenho, avaliação e segurança sob princípios de Zero Trust.
+
+A pesquisa adota uma abordagem experimental, fundamentada em revisão bibliográfica e a aplicação de métricas DORA e Zero Trust para a realização de análises de desempenho.
+
+O experimento contempla a implementação de uma arquitetura de CI/CD em Kubernetes com agentes efêmeros e diferentes configurações de infraestrutura computacional e mecanismos de segurança.
+
+Os resultados indicam que a arquitetura proposta contribui para maior escalabilidade, isolamento das execuções e redução de custos computacionais em até 90% por meio da segregação de workloads em instâncias Spot.
+
+Sob a ótica de segurança, os experimentos evidenciaram a mitigação de 100% das ameaças de propagação de comprometimento através do isolamento automático de serviços não conformes via SPIRE.
+
+Observou-se ainda que os mecanismos de validação (como Cosign e Rekor) adicionam baixo impacto operacional, acrescentando uma latência média de apenas 6 segundos ao tempo de atestação, enquanto aumentam significativamente a rastreabilidade e a confiança nos artefatos implantados.
+
+No que se refere às métricas DORA, a solução apresentou desempenho compatível com o nível de maturidade "Elite", demonstrando potencial para reduzir o Lead Time para menos de uma hora e manter taxas de falha em mudanças entre 0% e 15%.
+
+Conclui-se que a integração entre DevOps, Kubernetes, métricas DORA e Zero Trust constitui uma abordagem viável para construção de plataformas modernas de entrega contínua.
+
+\textbf{Palavras-chave}: DevOps. CI/CD. Kubernetes. Métricas DORA. Zero Trust.

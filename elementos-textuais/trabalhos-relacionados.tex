@@ -70,6 +70,22 @@ Pesquisas recentes demonstram que a utilização combinada de SPIRE e mecanismos
 \section{Síntese dos Trabalhos Relacionados}
 \label{sec:sintese-trabalhos-relacionados}
 
-A análise dos trabalhos estudados evidencia que a combinação entre Kubernetes, Jenkins, práticas DevSecOps e arquiteturas Zero Trust representa uma tendência consolidada na indústria de software. Entretanto, observa-se que grande parte das pesquisas aborda esses elementos de forma isolada. Poucos trabalhos exploram simultaneamente aspectos de desempenho operacional, segurança contínua e monitoramento por métricas DORA.
+A análise dos trabalhos selecionados evidencia contribuições complementares para
+diferentes dimensões da arquitetura investigada nesta pesquisa. Os estudos relacionados
+ao Jenkins e Kubernetes concentram-se predominantemente na automação, escalabilidade e
+isolamento dos ambientes de execução, enquanto a abordagem DORA estabelece métricas para
+avaliação objetiva do desempenho da entrega de software \cite{dora2024}.
 
-Dessa forma, o presente trabalho busca contribuir por meio da proposição de uma arquitetura integrada que combine automação de pipelines CI/CD, monitoramento baseado em métricas DORA, utilização de agentes efêmeros em Kubernetes e mecanismos de conformidade contínua fundamentados nos princípios de Zero Trust.
+Por outro lado, \citeonline{gama2024} concentra sua investigação na conformidade
+contínua de vulnerabilidades após a implantação, utilizando princípios de \textit{Zero Trust}
+e o SPIRE como mecanismo de provisionamento de identidades. Posteriormente,
+\citeonline{gama2026} amplia essa abordagem ao incorporar indicadores de risco à decisão
+sobre conformidade e isolamento dos \textit{workloads}.
+
+Dessa forma, no conjunto de trabalhos analisados nesta pesquisa, observou-se que o
+desempenho operacional da entrega e a conformidade contínua de segurança são abordados
+predominantemente como dimensões distintas. Não foi identificado um trabalho que combine,
+em uma mesma arquitetura experimental, agentes efêmeros de CI/CD executados em Kubernetes,
+avaliação do processo de entrega por métricas DORA e conformidade contínua pós-implantação
+baseada em \textit{Zero Trust}. O presente trabalho posiciona-se nessa interseção, buscando
+avaliar conjuntamente essas dimensões.

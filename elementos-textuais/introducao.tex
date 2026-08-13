@@ -11,29 +11,112 @@ Diante desse cenário, abordagens fundamentadas em \textit{Zero Trust Architectu
 
 Além dos desafios relacionados à segurança, organizações enfrentam a necessidade de mensurar objetivamente a eficiência de seus processos de entrega de software. Nesse contexto, as métricas propostas pelo grupo \textit{DevOps Research and Assessment} (DORA) tornaram-se referência mundial para avaliação de desempenho operacional. Métricas como \textit{Deployment Frequency}, \textit{Lead Time for Changes}, \textit{Change Failure Rate} e \textit{Mean Time to Recovery} permitem avaliar simultaneamente velocidade de entrega e estabilidade operacional \cite{dora2024,dx2024}.
 
-A integração entre práticas DevOps, arquiteturas Kubernetes, métricas DORA e princípios de Zero Trust representa uma oportunidade para construção de ambientes de desenvolvimento mais seguros, resilientes e eficientes. Entretanto, ainda existem desafios relacionados à implementação dessas tecnologias de forma integrada, especialmente quando considerados aspectos de escalabilidade, custos operacionais, governança de segurança e observabilidade.
+Estudos anteriores têm investigado diferentes dimensões do processo moderno de
+entrega de software. As pesquisas conduzidas pelo \textit{DevOps Research and Assessment}
+(DORA) consolidaram métricas destinadas à avaliação do desempenho da entrega de software,
+considerando aspectos relacionados à vazão e à estabilidade das mudanças
+\cite{dora2024}. Em outra perspectiva, \citeonline{gama2024} investigou mecanismos de
+conformidade contínua de vulnerabilidades e identificou uma limitação nas abordagens
+concentradas exclusivamente nas verificações realizadas durante pipelines CI/CD. Segundo
+o autor, tais mecanismos não contemplam adequadamente mudanças dinâmicas ocorridas após
+a implantação, como o surgimento de novas vulnerabilidades em aplicações já implantadas.
+
+Para tratar essa limitação, \citeonline{gama2024} propõe o emprego de princípios de
+\textit{Zero Trust} e identidades de \textit{workloads} providas pelo SPIRE, permitindo
+a reavaliação contínua da postura de segurança e o isolamento de componentes que deixem
+de atender aos requisitos mínimos de conformidade. Esse problema também é retomado por
+\citeonline{gama2026}, que estendem a abordagem para considerar indicadores de risco e
+mecanismos de resposta a violações de conformidade após a implantação.
+
+Observa-se, entretanto, que essas linhas de investigação tratam predominantemente
+dimensões distintas do problema. Enquanto as métricas DORA concentram-se na avaliação
+do desempenho do processo de entrega de software, os trabalhos de
+\citeonline{gama2024} e \citeonline{gama2026} concentram-se na conformidade contínua
+de vulnerabilidades e na resposta a alterações da postura de segurança. No conjunto de
+trabalhos analisados nesta pesquisa, não foi identificado um estudo que avalie conjuntamente
+uma arquitetura CI/CD baseada em Kubernetes considerando a elasticidade da infraestrutura,
+o desempenho da entrega por meio de métricas DORA e mecanismos de conformidade contínua
+pós-implantação fundamentados em \textit{Zero Trust}. Essa interseção constitui a lacuna
+de pesquisa investigada neste trabalho.
 
 \section{Problema de Pesquisa}
 \label{sec:problema-pesquisa}
 
-Apesar da ampla adoção de pipelines CI/CD e plataformas Kubernetes por organizações modernas, muitas implementações ainda apresentam limitações relacionadas ao uso ineficiente de recursos computacionais, à ausência de mecanismos avançados de validação contínua de segurança e à dificuldade de mensuração objetiva do desempenho operacional.
+A literatura analisada evidencia duas preocupações relevantes relacionadas à
+modernização do processo de entrega de software, porém investigadas predominantemente
+sob perspectivas distintas. De um lado, as métricas DORA permitem avaliar quantitativamente
+o desempenho da entrega de software, considerando características associadas à velocidade
+e à estabilidade das mudanças \cite{dora2024}. De outro, \citeonline{gama2024} demonstra
+que verificações de vulnerabilidades restritas à pipeline CI/CD não são suficientes para
+lidar com alterações na postura de segurança ocorridas após a implantação.
 
-Adicionalmente, a utilização de agentes estáticos de compilação, processos manuais de validação e modelos de segurança baseados exclusivamente em perímetro contribuem para o aumento de custos operacionais, ampliação da superfície de ataque e redução da capacidade de resposta diante de incidentes de segurança.
+Essa limitação decorre do caráter dinâmico das dependências de software: uma aplicação
+considerada segura no momento do \textit{deploy} pode deixar de atender aos critérios de
+conformidade quando novas vulnerabilidades são posteriormente identificadas. Nesse cenário,
+\citeonline{gama2024} propõe associar conformidade contínua a mecanismos de identidade
+baseados em \textit{Zero Trust}, de forma que \textit{workloads} que deixem de cumprir
+a postura mínima de segurança possam ter sua comunicação restringida.
 
-Diante desse contexto, surge a seguinte questão de pesquisa:
+Considerando ambientes de entrega baseados em Kubernetes, torna-se relevante investigar
+como essa dimensão de segurança pode ser analisada em conjunto com o desempenho operacional
+do processo de entrega e com a elasticidade proporcionada pelo provisionamento dinâmico
+de agentes de execução.
+
+Diante desse contexto, estabelece-se a seguinte questão de pesquisa:
 
 \begin{citacao}
-Como projetar uma arquitetura de CI/CD baseada em Kubernetes capaz de combinar eficiência operacional, redução de custos computacionais, monitoramento por métricas DORA e mecanismos de segurança fundamentados nos princípios de Zero Trust?
+Como uma arquitetura de CI/CD baseada em Kubernetes e orientada por princípios \textit{Zero Trust}, pode contribuir para o desempenho operacional e a segurança de pipelines de entrega de software?
 \end{citacao}
 
 \section{Justificativa}
 \label{sec:justificativa}
 
-A relevância deste trabalho está associada ao crescimento contínuo da adoção de ambientes \textit{Cloud Native} e à necessidade de construção de pipelines cada vez mais seguras e automatizadas. Organizações modernas dependem da capacidade de entregar software rapidamente sem comprometer requisitos de qualidade, disponibilidade e segurança.
+A relevância deste trabalho está associada à consolidação das tecnologias \textit{Cloud
+Native} como base para o desenvolvimento e a operação de sistemas modernos. Dados da
+\textit{Cloud Native Computing Foundation} (CNCF) indicam que, em 2024, 89\% das
+organizações pesquisadas já adotavam tecnologias \textit{Cloud Native}, enquanto 93\%
+utilizavam, testavam ou avaliavam o Kubernetes. O uso da plataforma em ambientes de
+produção alcançou 80\% das organizações pesquisadas, frente a 66\% no levantamento
+anterior \cite{cncf2024}.
 
-Sob a perspectiva acadêmica, a pesquisa contribui para a consolidação do conhecimento relacionado à integração entre DevOps, Kubernetes, métricas DORA e arquiteturas Zero Trust, reunindo conceitos frequentemente estudados de forma isolada. Sob a perspectiva prática, os resultados obtidos podem servir como referência para equipes responsáveis pela modernização de pipelines de desenvolvimento em ambientes corporativos.
+A automação dos processos de integração e entrega também acompanha essa expansão.
+Segundo o mesmo levantamento, o uso de CI/CD em produção cresceu 31\% entre 2023 e
+2024, sendo empregado para a maior parte ou para todas as aplicações por 60\% das
+organizações pesquisadas. Além disso, 29\% dos respondentes informaram realizar
+implantações de código múltiplas vezes ao dia, percentual superior aos 23\% observados
+no ano anterior \cite{cncf2024}. Esses indicadores evidenciam que automação,
+orquestração e ciclos frequentes de entrega deixaram de constituir práticas restritas a
+ambientes experimentais e passaram a integrar infraestruturas de produção.
 
-Além disso, a análise comparativa entre plataformas gerenciadas de Kubernetes, associada à avaliação de estratégias de escalabilidade baseadas em agentes efêmeros e instâncias Spot, fornece subsídios relevantes para decisões arquiteturais envolvendo desempenho, disponibilidade e otimização de custos.
+Entretanto, a ampla adoção dessas tecnologias não elimina os desafios relacionados ao
+desempenho e à segurança do processo de entrega. O relatório DORA de 2024 identificou
+quatro grupos distintos de desempenho entre as organizações pesquisadas. Apenas 19\%
+dos respondentes foram classificados no nível \textit{Elite}, caracterizado por
+\textit{lead time} inferior a um dia, múltiplas implantações diárias, taxa de falha de
+mudanças de aproximadamente 5\% e recuperação de implantações malsucedidas em menos de
+uma hora. Em contraste, 25\% foram classificados no nível de baixo desempenho, no qual
+o tempo entre uma alteração e sua disponibilização pode variar entre um e seis meses e
+a recuperação de uma implantação malsucedida pode demandar entre uma semana e um mês
+\cite{dora2024report}.
+
+Sob a perspectiva da segurança, o levantamento da CNCF também demonstra que a
+automação das verificações ainda não acompanha integralmente a adoção da infraestrutura:
+57\% das organizações pesquisadas declararam utilizar ferramentas automatizadas para
+detecção de vulnerabilidades \cite{cncf2024}. Além disso, \citeonline{gama2024}
+demonstra que verificações realizadas exclusivamente durante a pipeline CI/CD não
+contemplam adequadamente mudanças na postura de segurança que podem ocorrer após a
+implantação, como a descoberta posterior de vulnerabilidades em componentes já
+executados em produção.
+
+Nesse contexto, justifica-se investigar uma arquitetura que trate conjuntamente
+eficiência operacional, desempenho da entrega e segurança contínua. A utilização de
+Jenkins sobre Kubernetes com agentes efêmeros permite explorar elasticidade e isolamento
+da infraestrutura de CI/CD; as métricas DORA fornecem mecanismos quantitativos para
+avaliação do desempenho do processo de entrega; e os princípios de \textit{Zero Trust},
+associados ao SPIRE, possibilitam incorporar mecanismos de validação de identidade e
+conformidade contínua após a implantação. Assim, a pesquisa busca aproximar dimensões
+que, conforme discutido nos trabalhos relacionados, são predominantemente avaliadas
+separadamente na literatura analisada.
 
 \section{Objetivos}
 \label{sec:objetivos}
@@ -41,19 +124,15 @@ Além disso, a análise comparativa entre plataformas gerenciadas de Kubernetes,
 \subsection{Objetivo Geral}
 \label{sec:objetivo-geral}
 
-Propor e analisar uma arquitetura de referência para automação de pipelines CI/CD em ambientes de nuvem utilizando Jenkins e Kubernetes, incorporando métricas DORA para monitoramento de desempenho e mecanismos de segurança baseados nos princípios de Zero Trust.
+Desenvolver uma arquitetura para automação de pipelines CI/CD baseada em Kubernetes, considerando desempenho e mecanismos de segurança sob princípios de \textit{Zero Trust}.
 
 \subsection{Objetivos Específicos}
 \label{sec:objetivos-especificos}
 
 \begin{alineas}
-    \item Investigar os conceitos fundamentais de DevOps, CI/CD, Kubernetes, DevSecOps e Zero Trust Architecture;
-    \item Comparar características técnicas, operacionais e financeiras das plataformas Amazon EKS, Azure AKS e Google GKE;
-    \item Projetar uma arquitetura baseada em Jenkins executando sobre Kubernetes com provisionamento dinâmico de agentes de compilação;
+    \item Definir os componentes e mecanismos de uma arquitetura de CI/CD baseada em Kubernetes com provisionamento dinâmico de agentes de compilação;
     \item Implementar uma pipeline DevSecOps contendo mecanismos automatizados de análise estática, varredura de vulnerabilidades e implantação contínua;
     \item Avaliar estratégias de redução de custos utilizando segregação de workloads entre instâncias On-Demand e Spot;
-    \item Aplicar métricas DORA para mensuração da eficiência operacional da arquitetura proposta;
-    \item Analisar mecanismos de conformidade contínua e validação de identidade baseados em Zero Trust e SPIRE.
 \end{alineas}
 
 \section{Organização do Trabalho}
